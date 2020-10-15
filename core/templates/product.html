@@ -78,7 +78,13 @@
 
         <!--Grid column-->
         <div class="col-md-6 mb-4">
-
+          {% if messages %}
+          {% for message in messages %}
+          <div class="alert alert-{{ message.tags }}" role="alert">
+            {{ message }}
+          </div>
+          {% endfor %}
+      {% endif %}
           <!--Content-->
           <div class="p-4">
 
