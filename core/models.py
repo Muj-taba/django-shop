@@ -46,8 +46,19 @@ class OrderItem(models.Model):
     quantity = models.IntegerField(default=1)
 
 
+
     def __str__(self):
         return f"{self.quantity} of {self.item.title}"
+
+
+    def get_total_item_price(self):
+        return self.quantity * self.item.price
+
+
+    def get_total_discount_item_price (self):
+        return self.quantity * self.item.discount_price
+
+
 
 
 class Order(models.Model):
@@ -61,3 +72,4 @@ class Order(models.Model):
     def __str__(self):
         return self.user.username
 
+ 

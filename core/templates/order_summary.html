@@ -1,5 +1,6 @@
 {% load static %}
 {% load cart_template_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -16,14 +17,67 @@
   <link href="{% static 'css/mdb.min.css'%}" rel="stylesheet">
   <!-- Your custom styles (optional) -->
   <link href="{% static 'css/style.min.css'%}" rel="stylesheet">
+  <style type="text/css">
+    html,
+    body,
+    header,
+    .carousel {
+      height: 60vh;
+    }
+
+    @media (max-width: 740px) {
+
+      html,
+      body,
+      header,
+      .carousel {
+        height: 100vh;
+      }
+    }
+
+    @media (min-width: 800px) and (max-width: 850px) {
+
+      html,
+      body,
+      header,
+      .carousel {
+        height: 100vh;
+      }
+    }
+
+  </style>
 </head>
 
 <body>
 
+
+
+  <!--Carousel Wrapper-->
+  <div class=" p-5">
+
+  </div>
+   
+
+  
+
+
+
+  </div>
+  <!--/.Carousel Wrapper-->
+
+  <!--Main layout-->
+  <main>
+    <div class="container">
+
+      <!--Navbar-->
   <!-- Navbar -->
   <nav class="navbar fixed-top navbar-expand-lg navbar-light white scrolling-navbar">
     <div class="container">
 
+      <!-- Brand -->
+      <a class="navbar-brand waves-effect" href="{% url 'core:home' %}">
+        <strong class="blue-text">Dj-shop</strong>
+      </a>
 
       <!-- Collapse -->
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
@@ -36,15 +90,15 @@
 
         <!-- Left -->
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link waves-effect" href="{% url 'core:home' %}">Home
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
 
+          <li class="nav-item">
+            <a class="nav-link waves-effect" href="">Product</a>
+          </li>
+   
         </ul>
 
         <!-- Right -->
+ 
         <ul class="navbar-nav nav-flex-icons">
           {% if user.is_authenticated %}
           <li class="nav-item">
@@ -82,84 +136,47 @@
     </div>
   </nav>
   <!-- Navbar -->
+      <!--/.Navbar-->
+      <h2>Order summery</h2>
+      <div class="table-responsive text-nowrap">
 
-  <!--Main layout-->
-  <main class="mt-5 pt-4">
-    <div class="container dark-grey-text mt-5">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Item Title</th>
+              <th scope="col">Price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Totel item price</th>
 
-      <!--Grid row-->
-      <div class="row wow fadeIn">
+            </tr>
+          </thead>
+          <tbody>
+            {% for order_item in object.items.all %}
+            <tr>
+              <th scope="row">1</th>
+              <td>{{ order_item.item.title }}</td>
+              <td>$ {{ order_item.item.price }}</td>
+              <td>$ {{ order_item.quantity }}</td>
 
-        <!--Grid column-->
-        <div class="col-md-6 mb-4">
+              <td>
+                {% if order_item.item.discount_price %}
+                    $ {{ order_item.get_total_discount_item_price }}
+                <span class="badge badge-success">Saving $ {{ order_item.get_amount_saved }}</span>
+                {% else %}
+                    $ {{ order_item.get_total_item_price }}
+                {% endif %}
+                <a style='color: red;' href="">
+                    <i class="fas fa-trash float-right"></i>
+                </a>
+                </td>
+            </tr>
+            {% endfor %}
 
-          <img src="https://mdbootstrap.com/img/Photos/Horizontal/E-commerce/Products/14.jpg" class="img-fluid" alt="">
-
-        </div>
-        <!--Grid column-->
-
-        <!--Grid column-->
-        <div class="col-md-6 mb-4">
-          {% if messages %}
-          {% for message in messages %}
-          <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          {% endfor %}
-          {% endif %}
-          <!--Content-->
-          <div class="p-4">
-
-            <div class="mb-3">
-              <a href="">
-                <span class="badge purple mr-1">{{object.get_category_display}}</span>
-              </a>
-              
-            </div>
-
-            
-            <p class="lead">
-              {% if object.discount_price%}
-              <span class="mr-1">
-                <del>${{item.price}}</del>
-              <span>${{item.discount_price}}</span>
-              </span>
-              {%else%}
-              <span class="mr-1">
-                <span>${{item.price}}</span>
-              </span>
-              {% endif %}
-            </p>
-
-            <p class="lead font-weight-bold">Description</p>
-
-            <p>{{item.description}}.</p>
-
-           
-             
-              <a href="{{object.get_add_to_cart_url}}" class="btn btn-primary btn-md my-0 p">Add to cart
-                <i class="fas fa-shopping-cart ml-1"></i>
-              </a>
-              <a href="{{object.get_remove_to_cart_url}}" class="btn btn-danger btn-md my-0 p">Remove to cart
-               
-              </a>
+          </tbody>
+        </table>
       
-
-
-          </div>
-          <!--Content-->
-
-        </div>
-        <!--Grid column-->
-
       </div>
-      <!--Grid row-->
-
-   
-  
 
 
 
@@ -171,7 +188,43 @@
   <footer class="page-footer text-center font-small mt-4 wow fadeIn">
 
 
+    <hr class="my-4">
 
+    <!-- Social icons -->
+    <div class="pb-4">
+      <a href="https://www.facebook.com/mdbootstrap" target="_blank">
+        <i class="fab fa-facebook-f mr-3"></i>
+      </a>
+
+      <a href="https://twitter.com/MDBootstrap" target="_blank">
+        <i class="fab fa-twitter mr-3"></i>
+      </a>
+
+      <a href="https://www.youtube.com/watch?v=7MUISDJ5ZZ4" target="_blank">
+        <i class="fab fa-youtube mr-3"></i>
+      </a>
+
+      <a href="https://plus.google.com/u/0/b/107863090883699620484" target="_blank">
+        <i class="fab fa-google-plus-g mr-3"></i>
+      </a>
+
+      <a href="https://dribbble.com/mdbootstrap" target="_blank">
+        <i class="fab fa-dribbble mr-3"></i>
+      </a>
+
+      <a href="https://pinterest.com/mdbootstrap" target="_blank">
+        <i class="fab fa-pinterest mr-3"></i>
+      </a>
+
+      <a href="https://github.com/mdbootstrap/bootstrap-material-design" target="_blank">
+        <i class="fab fa-github mr-3"></i>
+      </a>
+
+      <a href="http://codepen.io/mdbootstrap/" target="_blank">
+        <i class="fab fa-codepen mr-3"></i>
+      </a>
+    </div>
+    <!-- Social icons -->
 
     <!--Copyright-->
     <div class="footer-copyright py-3">
