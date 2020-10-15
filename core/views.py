@@ -10,6 +10,7 @@ from django.utils import timezone
 
 class ProductList(ListView):
     model = Item
+    paginate_by = 2
     template_name = 'product_list.html'
 
 
